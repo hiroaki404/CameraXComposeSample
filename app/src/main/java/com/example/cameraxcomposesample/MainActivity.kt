@@ -5,12 +5,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.camera.compose.CameraXViewfinder
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,9 +33,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             CameraXComposeSampleTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    contentWindowInsets = WindowInsets(0, 0, 0, 0),
+                ) { innerPadding ->
                     val previewViewModel = PreviewViewModel()
                     val cameraPermissionState =
                         rememberPermissionState(android.Manifest.permission.CAMERA)
@@ -62,10 +72,19 @@ fun PreviewView(modifier: Modifier = Modifier, viewModel: PreviewViewModel) {
     }
 
     surfaceRequest?.let {
-        CameraXViewfinder(
-            modifier = modifier.fillMaxSize(),
-            surfaceRequest = it,
-        )
+        Box(contentAlignment = Alignment.BottomCenter) {
+            CameraXViewfinder(
+                modifier = modifier.fillMaxSize(),
+                surfaceRequest = it,
+            )
+
+            Button(
+                modifier = Modifier.navigationBarsPadding(),
+                onClick = { viewModel.takePicture(context) },
+            ) {
+                Text("Take Picture")
+            }
+        }
     }
 }
 
