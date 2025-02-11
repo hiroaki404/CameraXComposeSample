@@ -1,7 +1,6 @@
 package com.example.cameraxcomposesample.ui
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -33,9 +32,7 @@ class PreviewViewModel : ViewModel() {
         }
     }
 
-    private val takePictureUseCase = ImageCapture.Builder()
-        .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-        .build()
+    private val takePictureUseCase = ImageCapture.Builder().build()
 
     suspend fun bindToCamera(context: Context, lifecycleOwner: LifecycleOwner) {
         val processCameraProvider = ProcessCameraProvider.awaitInstance(context)
@@ -63,7 +60,6 @@ class PreviewViewModel : ViewModel() {
 
             takePictureUseCase.takePicture(
                 outputFileOptions = outputFileOptions,
-                onCaptureStarted = { Log.d("PreviewViewModel", "Capture started") },
             )
         }
     }
